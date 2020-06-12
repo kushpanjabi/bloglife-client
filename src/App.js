@@ -1,80 +1,23 @@
-import React from 'react';
-import './App.css';
-import ListItems from './ListItems';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-library.add(faTrash);
+import Home from './Home';
+import Landing from './Landing';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      entries:[],
-      currentEntry:{
-        text: '',
-        key:''
-      }
-    }
-    this.handleInput = this.handleInput.bind(this);
-    this.addEntry = this.addEntry.bind(this);
-    this.deleteEntry = this.deleteEntry.bind(this);
-  }
-
-  handleInput(e) {
-    this.setState({
-      currentEntry:{
-        text: e.target.value,
-        key: Date.now()
-      }
-    })
-  }
-
-  addEntry(e) {
-    e.preventDefault();
-    const newEntry = this.state.currentEntry;
-    console.log(newEntry);
-    if(newEntry.text !== '') {
-      const newEntries =[...this.state.entries, newEntry]
-      this.setState({
-        entries: newEntries,
-        currentEntry:{
-          text:'',
-          key:''
-        }
-      })
-    }
-  }
-
-  deleteEntry(key){
-    const filteredEntries = this.state.entries.filter(entry => entry.key!==key);
-    this.setState({
-      entries: filteredEntries
-    })
-  }
+class App extends Component {
   render() {
     return (
-      <div>
-        <h1>Blog Life</h1>
-        <div className='App'>
-          <header>
-            <form id="blog-entry-form" onSubmit={this.addEntry}>
-              <input 
-              type="text" 
-              placeholder="What did you do today?" 
-              value={this.state.currentEntry.text}
-              onChange={this.handleInput} />
-              <button type="submit">Add</button>
-            </form>
-          </header>
-          <ListItems 
-          entries={this.state.entries} 
-          deleteEntry={this.deleteEntry}
-          />
+      <BrowserRouter>
+        <div>
+          <Switch>
+            <Route path="/" component={Landing} exact />
+            <Route path="/home" component={Home} />
+            <Route component={Error} />
+          </Switch>
         </div>
-      </div>
+      </BrowserRouter>
     );
   }
-}
+};
 
-export default App;
+export default App; 
